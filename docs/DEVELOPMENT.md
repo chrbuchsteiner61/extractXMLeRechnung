@@ -1,1 +1,110 @@
-# Development Guide\n\n## Project Structure\n\n```\nextractXMLeRechnung/\n├── src/                    # Source code\n│   ├── main.rs            # Application entry point\n│   ├── handlers.rs        # HTTP request handlers\n│   ├── service.rs         # Business logic\n│   ├── models.rs          # Data models\n│   ├── pdf.rs             # PDF processing utilities\n│   └── errors.rs          # Error definitions\n├── tests/                 # Integration tests\n├── examples/              # Usage examples\n├── docs/                  # Documentation\n├── .github/workflows/     # CI/CD pipelines\n├── Cargo.toml            # Project dependencies\n└── README.md             # Project overview\n```\n\n## Development Setup\n\n1. Install Rust toolchain:\n   ```bash\n   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\n   ```\n\n2. Install additional tools:\n   ```bash\n   cargo install cargo-watch    # For auto-recompilation\n   cargo install cargo-audit     # For security auditing\n   ```\n\n3. Run in development mode:\n   ```bash\n   cargo watch -x run\n   ```\n\n## Testing\n\n```bash\n# Run all tests\ncargo test\n\n# Run with coverage\ncargo test -- --nocapture\n\n# Run integration tests only\ncargo test --test integration_tests\n```\n\n## Code Quality\n\n```bash\n# Format code\ncargo fmt\n\n# Lint code\ncargo clippy\n\n# Security audit\ncargo audit\n```\n\n## Building\n\n```bash\n# Debug build\ncargo build\n\n# Release build\ncargo build --release\n```\n
+# Development Guide
+
+## Project Structure
+
+```
+extractXMLeRechnung/
+├── src/                    # Source code
+│   ├── main.rs            # Application entry point
+│   ├── handlers.rs        # HTTP request handlers
+│   ├── service.rs         # Business logic
+│   ├── models.rs          # Data models
+│   ├── pdf.rs             # PDF processing utilities
+│   └── errors.rs          # Error definitions
+├── tests/                 # Integration tests
+├── examples/              # Usage examples
+├── docs/                  # Documentation
+├── .github/workflows/     # CI/CD pipelines
+├── Cargo.toml            # Project dependencies
+└── README.md             # Project overview
+```
+
+## Development Setup
+
+1. **Install Rust toolchain:**
+   ```bash
+   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+   ```
+
+2. **Install additional tools:**
+   ```bash
+   cargo install cargo-watch    # For auto-recompilation
+   cargo install cargo-audit     # For security auditing
+   ```
+
+3. **Run in development mode:**
+   ```bash
+   cargo watch -x run
+   ```
+
+## Testing
+
+```bash
+# Run all tests
+cargo test
+
+# Run with coverage
+cargo test -- --nocapture
+
+# Run integration tests only
+cargo test --test integration_tests
+```
+
+## Code Quality
+
+```bash
+# Format code
+cargo fmt
+
+# Lint code
+cargo clippy
+
+# Security audit
+cargo audit
+```
+
+## Building
+
+```bash
+# Debug build
+cargo build
+
+# Release build
+cargo build --release
+```
+
+## Docker Development
+
+Build and run with Docker:
+
+```bash
+# Build image
+docker build -t extract-xml-rechnung .
+
+# Run container
+docker run -p 8080:8080 extract-xml-rechnung
+```
+
+Or use docker-compose for development:
+
+```bash
+# Start development environment
+docker-compose up --build
+
+# Run in background
+docker-compose up -d
+```
+
+## API Testing
+
+Test the API endpoints:
+
+```bash
+# Health check
+curl http://localhost:8080/health
+
+# Extract XML from PDF (example)
+curl -X POST http://localhost:8080/extract \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@example.pdf"
+```\n
