@@ -44,7 +44,7 @@ impl PDFA3Validator {
     pub fn validate(pdf_bytes: &[u8]) -> Result<(), PDFError> {
 
         let pdf_string = String::from_utf8_lossy(pdf_bytes);
-        let is_pdfa3 = pdf_string.contains("PDF/A-3");
+        let is_pdfa3 = pdf_string.contains("<pdfaid:part>3</pdfaid:part>");
 
         if !is_pdfa3 {
             return Err(PDFError::NotPDFA3);
@@ -116,16 +116,12 @@ impl EmbeddedFilesExtractor {
     }
 }
 
-/// Extract XML content from PDF bytes using lopdf
-pub fn extract_xml_from_pdf(pdf_bytes: &[u8]) -> Result<Vec<String>> {
+/// Carve out XML content from PDF bytes using lopdf
+pub fn carveout_xml_from_pdf(pdf_bytes: &[u8]) -> Result<Vec<String>> {
     use std::io::Cursor;
     let cursor = Cursor::new(pdf_bytes);
     let doc = Document::load_from(cursor)?;
-    extract_xml_from_document(&doc)
-}
 
-/// Helper function to extract XML from a loaded PDF document
-fn extract_xml_from_document(doc: &Document) -> Result<Vec<String>> {
     let mut xml_contents = Vec::new();
 
     // Iterate through all objects in the PDF
@@ -143,6 +139,7 @@ fn extract_xml_from_document(doc: &Document) -> Result<Vec<String>> {
 
     Ok(xml_contents)
 }
+
 /// Check if the content appears to be XML
 fn is_xml_content(text: &str) -> bool {
     text.contains("<?xml") 

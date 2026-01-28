@@ -1,6 +1,6 @@
 use crate::errors::PDFError;
 use crate::models::{ErrorResponse, SuccessResponse};
-use crate::pdf_worker::{EmbeddedFilesExtractor, extract_xml_from_pdf, PDFA3Validator};
+use crate::pdf_worker::{EmbeddedFilesExtractor, carveout_xml_from_pdf, PDFA3Validator};
 
 /// Main business logic for eRechnung processing
 pub struct ERechnungService;
@@ -45,7 +45,7 @@ impl ERechnungService {
             })?;
 
         // Extract XML content using lopdf
-        let xml_contents = extract_xml_from_pdf(&pdf_bytes).map_err(|_| {
+        let xml_contents = carveout_xml_from_pdf(&pdf_bytes).map_err(|_| {
             ErrorResponse {
                 file_status: PDFError::ExtractionFailed.to_string(),
                 embedded_files: Some(embedded_files.join(", ")),
