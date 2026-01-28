@@ -7,7 +7,7 @@ extractXMLeRechnung/
 ├── src/                    # Source code
 │   ├── main.rs            # Application entry point
 │   ├── handlers.rs        # HTTP request handlers
-│   ├── service.rs         # Business logic
+│   ├── erechnung_pdf_service.rs         # Business logic
 │   ├── models.rs          # Data models
 │   ├── pdf.rs             # PDF processing utilities
 │   └── errors.rs          # Error definitions

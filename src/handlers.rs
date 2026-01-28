@@ -4,7 +4,7 @@ use futures_util::stream::StreamExt;
 use std::io::Write;
 
 use crate::models::ErrorResponse;
-use crate::service::ERechnungService;
+use crate::erechnung_pdf_service::ERechnungService;
 
 extern crate serde_json;
 

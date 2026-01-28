@@ -1,17 +1,26 @@
 use crate::errors::PDFError;
 use crate::models::{ErrorResponse, SuccessResponse};
-use crate::extract_xml::{EmbeddedFilesExtractor, extract_xml_from_pdf_bytes};
+use crate::pdf_worker::{EmbeddedFilesExtractor, extract_xml_from_pdf, PDFA3Validator};
 
 /// Main business logic for eRechnung processing
 pub struct ERechnungService;
 
 impl ERechnungService {
     /// Process a PDF file and extract XML content
+    
     pub fn process_pdf(pdf_bytes: Vec<u8>) -> Result<SuccessResponse, ErrorResponse> {
         // Basic PDF validation
         if pdf_bytes.len() < 5 || &pdf_bytes[0..5] != b"%PDF-" {
             return Err(ErrorResponse {
                 file_status: PDFError::InvalidPDF.to_string(),
+                embedded_files: None,
+            });
+        }
+
+        // Validate PDF/A-3 format
+        if let Err(PDFError::NotPDFA3) = PDFA3Validator::validate(&pdf_bytes) {
+            return Err(ErrorResponse {
+                file_status: PDFError::NotPDFA3.to_string(),
                 embedded_files: None,
             });
         }
@@ -36,7 +45,7 @@ impl ERechnungService {
             })?;
 
         // Extract XML content using lopdf
-        let xml_contents = extract_xml_from_pdf_bytes(&pdf_bytes).map_err(|_| {
+        let xml_contents = extract_xml_from_pdf(&pdf_bytes).map_err(|_| {
             ErrorResponse {
                 file_status: PDFError::ExtractionFailed.to_string(),
                 embedded_files: Some(embedded_files.join(", ")),
@@ -47,9 +56,7 @@ impl ERechnungService {
         let xml_content = xml_contents
             .iter()
             .find(|content| {
-                content.contains("<rsm:") || 
-                content.contains("<ubl:") || 
-                content.contains("<Invoice")
+                content.contains("<rsm:")
             })
             .or_else(|| xml_contents.first())
             .ok_or_else(|| ErrorResponse {

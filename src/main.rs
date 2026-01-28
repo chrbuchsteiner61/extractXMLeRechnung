@@ -2,8 +2,8 @@
 mod errors;
 mod handlers;
 mod models;
-mod extract_xml;
-mod service;
+mod pdf_worker;
+mod erechnung_pdf_service;
 
 use actix_web::{middleware, web, App, HttpServer};
 use handlers::{extract_xml, health_check};

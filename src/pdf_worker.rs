@@ -2,7 +2,6 @@ use crate::errors::PDFError;
 use anyhow::Result;
 use lopdf::Document;
 
-use serde_xml_rs::from_str;
 
 /// Low-level PDF parsing utilities
 pub struct PDFParser;
@@ -43,15 +42,9 @@ pub struct PDFA3Validator;
 
 impl PDFA3Validator {
     pub fn validate(pdf_bytes: &[u8]) -> Result<(), PDFError> {
-        if pdf_bytes.len() < 5 || &pdf_bytes[0..5] != b"%PDF-" {
-            return Err(PDFError::InvalidPDF);
-        }
 
         let pdf_string = String::from_utf8_lossy(pdf_bytes);
-        let is_pdfa3 = pdf_string.contains("PDF/A-3")
-            || pdf_string.contains("pdfa:part>3")
-            || pdf_string.contains("pdfaid:part>3")
-            || pdf_string.contains("pdfaid:conformance");
+        let is_pdfa3 = pdf_string.contains("PDF/A-3");
 
         if !is_pdfa3 {
             return Err(PDFError::NotPDFA3);
@@ -123,14 +116,8 @@ impl EmbeddedFilesExtractor {
     }
 }
 
-/// Extracts XML content from PDF file path using lopdf
-pub fn extract_xml_from_pdf(path: &str) -> Result<Vec<String>> {
-    let doc = Document::load(path)?;
-    extract_xml_from_document(&doc)
-}
-
 /// Extract XML content from PDF bytes using lopdf
-pub fn extract_xml_from_pdf_bytes(pdf_bytes: &[u8]) -> Result<Vec<String>> {
+pub fn extract_xml_from_pdf(pdf_bytes: &[u8]) -> Result<Vec<String>> {
     use std::io::Cursor;
     let cursor = Cursor::new(pdf_bytes);
     let doc = Document::load_from(cursor)?;
@@ -156,12 +143,7 @@ fn extract_xml_from_document(doc: &Document) -> Result<Vec<String>> {
 
     Ok(xml_contents)
 }
-
 /// Check if the content appears to be XML
 fn is_xml_content(text: &str) -> bool {
     text.contains("<?xml") 
-        || text.contains("<rdf:RDF") 
-        || text.contains("<rsm:") 
-        || text.contains("<ubl:") 
-        || text.contains("<Invoice")
 }

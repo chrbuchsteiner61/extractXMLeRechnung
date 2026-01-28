@@ -109,7 +109,7 @@ The application is structured into several modules:
 
 - **`main.rs`**: Application entry point and server configuration
 - **`handlers.rs`**: HTTP request handlers and routing logic
-- **`service.rs`**: Core business logic for PDF processing
+- **`erechnung_pdf_service.rs`**: Core business logic for PDF processing
 - **`models.rs`**: Data structures for requests/responses
 - **`pdf.rs`**: PDF/A-3 validation and XML extraction utilities
 - **`errors.rs`**: Custom error types and handling
