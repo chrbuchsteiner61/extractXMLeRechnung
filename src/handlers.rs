@@ -3,8 +3,8 @@ use actix_web::{HttpResponse, Result as ActixResult};
 use futures_util::stream::StreamExt;
 use std::io::Write;
 
-use crate::models::ErrorResponse;
 use crate::erechnung_pdf_service::ERechnungService;
+use crate::models::ErrorResponse;
 
 extern crate serde_json;
 

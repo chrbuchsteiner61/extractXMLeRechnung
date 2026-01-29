@@ -1,4 +1,8 @@
 /target
-examples/Rechnung-2025-11235-32002.pdf
 factur-x.xml
 examples/Testdocument.pdf
+examples/test_files/aTextFile_ohne_embedded.pdf
+examples/test_files/aTextFile_pdfa3_embedded.pdf
+examples/test_files/aTextFile_pdfa3_xml_embedded.pdf
+examples/test_files/Rechnung-2025-11235-32002.pdf
+examples/test_files/Testdocument.pdf

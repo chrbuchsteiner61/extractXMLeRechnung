@@ -7,7 +7,6 @@ pub struct PDFA3Validator;
 
 impl PDFA3Validator {
     pub fn validate(pdf_bytes: &[u8]) -> Result<(), PDFError> {
-
         let pdf_string = String::from_utf8_lossy(pdf_bytes);
         let is_pdfa3 = pdf_string.contains("<pdfaid:part>3</pdfaid:part>");
 
@@ -23,7 +22,6 @@ impl PDFA3Validator {
 pub struct EmbeddedFilesExtractor;
 
 impl EmbeddedFilesExtractor {
-
     /// Find all embedded file names in the PDF
     pub fn find_embedded_files(pdf_bytes: &[u8]) -> Vec<String> {
         let pdf_string = String::from_utf8_lossy(pdf_bytes);
@@ -92,5 +90,5 @@ pub fn carveout_xml_from_pdf(pdf_bytes: &[u8]) -> Result<Vec<String>> {
 
 /// Check if the content appears to be XML
 fn is_xml_content(text: &str) -> bool {
-    text.contains("<?xml") 
+    text.contains("<?xml")
 }
